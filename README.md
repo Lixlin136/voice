@@ -22,7 +22,7 @@
 
 1. 克隆仓库
 ```bash
-git clone https://github.com/lxl136/Voiceai.git
+https://github.com/Lixlin136/voice.git
 ```
 
 2. 安装依赖
