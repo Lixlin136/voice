@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+
+    <link rel="shortcut icon" href="{% static "images/DQLOGO.png" %}">
+    {#    主要原因#}
+    <link href="{% static "css/nifty.min.css" %}" rel="stylesheet">
+
+
+    <link href="{% static "css/nifty-demo-icons.min.css" %}" rel="stylesheet">
+    <link href="{% static  "css/nifty-demo.min.css" %}" rel="stylesheet">
+    <link href="{% static  "css/font-awesome.min.css" %}" rel="stylesheet">
+    <link href="{% static  "css/wiki.css" %}" rel="stylesheet">
+    <link href="{% static  "css/pace.min.css" %}" rel="stylesheet">
+    <script src="{% static  "js/pace.min.js" %}"></script>
+    <script src="{% static  "js/jquery-2.2.4.min.js" %}"></script>
+    <!--BootstrapJS [ RECOMMENDED ]-->
+    <script src="{% static  "js/bootstrap.min.js" %}"></script>
+    <!--NiftyJS [ RECOMMENDED ]-->
+    <script src="{% static  "js/nifty.min.js" %}"></script>
+    <script src="{% static  "js/icons.js" %}"></script>
+
+    <script src={% static "js/nifty-demo.min.js" %}></script>
+</head>
+
+<body>
+
+<div id="container" class="effect aside-float aside-bright mainnav-lg">
+    <header id="navbar">
+        <div id="navbar-container" class="boxed">
+            <div class="navbar-header">
+                <a href="{% url 'chat' %}" class="navbar-brand">
+                    {#                                            <img src="../static/images/DQLOGO.png.jpg" alt="Nifty Logo" class="brand-icon">#}
+                    <div class="brand-title" style="display: flex; align-items: center;">
+                        <img src="{% static 'images/yy.jpg' %}" height="25px" width="25px"
+                             style="border-radius: 40%; margin-right: 5px;">
+                        <span class="brand-text" style="color: honeydew">语音助手</span>
+                    </div>
+                </a>
+            </div>
+
+
+            <div class="navbar-content clearfix">
+                <ul class="nav navbar-top-links pull-left">
+
+                    <li class="tgl-menu-btn">
+                        <a class="mainnav-toggle" href="#">
+                            <i class="demo-pli-view-list"></i>
+                        </a>
+                    </li>
+
+                </ul>
+                <ul class="nav navbar-top-links pull-left">
+                    <h4 style="font-size: 20px">基于大语言模型的拟人化语音交互系统</h4>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <div class="boxed">
+        <div id="content-container" class="bg-gray-100 flex justify-center items-center h-screen">
+            <div class="modal-content bg-green-100 p-8 rounded-lg shadow-md w-3/4 md:w-1/2 lg:w-1/3" style="width: 600px;height: 400px">
+        <h3 class="text-2xl font-bold text-center text-gray-800 mb-6">人设风格设置</h3>
+
+        <form id="persona-form" method="post" action="{% url 'set_persona' %}">
+            {% csrf_token %}
+            <div class="mb-6">
+                <label for="persona-name" class="block text-xl font-medium text-gray-700 mb-2">名称:</label>
+                <input type="text" name="persona_name" id="persona-name" class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" placeholder="输入名称">
+            </div>
+            <div class="mb-6">
+                <label for="persona-description" class="block text-xl font-medium text-gray-700 mb-2">设定描述</label>
+                <textarea name="persona_description" id="persona-description" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" placeholder="示例: 你是一个说话温柔的女生，和你聊天像春风般温暖治愈。你在聊天时总会先认真倾听，让人倍感安心。"></textarea>
+            </div>
+            <div class="mb-6">
+                <label for="persona-voice" class="block text-xl font-medium text-gray-700 mb-2">声音:</label>
+                <select name="persona_voice" id="persona-voice" class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
+                    <option value="standard_female">标准女声</option>
+                    <option value="gentle_female">温柔女声</option>
+                    <option value="loli_female">萝莉女声</option>
+                    <option value="caring_female">知心姐姐</option>
+                    <option value="standard_male">标准男声</option>
+                    <option value="humorous_male">诙谐男声</option>
+                    <option value="natural_male">自然男声</option>
+                    <option value="magnetic_male">磁性男声</option>
+                </select>
+            </div>
+{#            <div class="mb-6">#}
+{#                <label for="persona-language" class="block text-xl font-medium text-gray-700 mb-2">语言：</label>#}
+{#                <select name="persona_language" id="persona-language" class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">#}
+{#                    <option value="chinese">中文</option>#}
+{#                    <option value="english">英文</option>#}
+{#                </select>#}
+{#            </div>#}
+
+            <div class="flex justify-center space-x-4">
+                <button type="button" id="persona-cancel" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none">取消</button>
+                <button type="submit" id="persona-confirm" class="px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none">确定</button>
+            </div>
+        </form>
+    </div>
+            
+        </div>
+        <script>
+        document.getElementById('persona-cancel').addEventListener('click', function () {
+            document.getElementById('persona-name').value = '';
+            document.getElementById('persona-description').value = '';
+        });
+
+        document.getElementById('persona-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+
+            fetch('{% url "set_persona" %}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('设置成功!');
+                } else {
+                    console.log('请求失败');
+                }
+            })
+            .catch(error => {
+                console.error('请求出错:', error);
+            });
+        });
+    </script>
+        <nav id="mainnav-container">
+            <div id="mainnav">
+                <div id="mainnav-menu-wrap">
+                    <div class="nano">
+                        <div class="nano-content">
+                            <ul id="mainnav-menu" class="list-group">
+                                <li class="list-header" style="font-size: 18px"> 个性化服务</li>
+                                <li>
+                                    <a href="{% url 'person_setting' %}" id="persona-style-btn">
+                                        <i class="fa fa-user" style="width:24px"></i>
+                                        <strong class="menu-title" style="font-size: 14px">人设风格</strong>
+                                    </a>
+                                </li>
+
+                                <li class="list-divider"></li>
+
+                                <li class="list-header" style="font-size: 18px">用户设置</li>
+                                <li>
+                                    <a href="{% url 'profile' %}">
+                                        <i class="fa fa-gear" style="width:24px"></i>
+                                        <strong class="menu-title" style="font-size: 14px">个人信息</strong>
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </nav>
+    </div>
+    <footer id="footer">
+    </footer>
+    <button class="scroll-top btn">
+        <i class="pci-chevron chevron-up"></i>
+    </button>
+</div>
+</div>
+</body>
+</html>

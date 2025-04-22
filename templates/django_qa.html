@@ -1,0 +1,490 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+
+    <link rel="shortcut icon" href="{% static "images/DQLOGO.png" %}">
+{#    主要原因#}
+    <link href="{% static "css/nifty.min.css" %}" rel="stylesheet">
+
+
+    <link href="{% static "css/nifty-demo-icons.min.css" %}" rel="stylesheet">
+    <link href="{% static  "css/nifty-demo.min.css" %}" rel="stylesheet">
+    <link href="{% static  "css/font-awesome.min.css" %}" rel="stylesheet">
+    <link href="{% static  "css/wiki.css" %}" rel="stylesheet">
+    <link href="{% static  "css/pace.min.css" %}" rel="stylesheet">
+    <script src="{% static  "js/pace.min.js" %}"></script>
+    <script src="{% static  "js/jquery-2.2.4.min.js" %}"></script>
+    <!--BootstrapJS [ RECOMMENDED ]-->
+    <script src="{% static  "js/bootstrap.min.js" %}"></script>
+    <!--NiftyJS [ RECOMMENDED ]-->
+    <script src="{% static  "js/nifty.min.js" %}"></script>
+    <script src="{% static  "js/icons.js" %}"></script>
+
+    <script src={% static "js/nifty-demo.min.js" %}></script>
+    <link href="{% static 'css/qastyle.css' %}">
+
+    <style>
+        .chat-container {
+            margin-left: 150px;
+        {#margin-top: 50px;#} width: 1000px;
+            max-width: 1000px;
+            height: 85vh;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 18px;
+            line-height: 1.5;
+            position: relative;
+        }
+
+        .bot-message {
+            background-color: #e5f5e0;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+            margin-right: auto;
+            font-size: 18px;
+        }
+
+        .user-message {
+            background-color: #4CAF50;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+            margin-left: auto;
+            font-size: 18px;
+        }
+
+
+    /* 添加样式部分 */
+    .chat-input {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        background: #f5f5f5;
+        border-top: 1px solid #e0e0e0;
+    }
+
+    .input-wrapper {
+        position: relative;
+        flex-grow: 1;
+    }
+
+    #user-input {
+        width: 100%;
+        padding: 12px 45px 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 24px;
+        outline: none;
+        font-size: 14px;
+        transition: all 0.3s;
+    }
+
+    #user-input:focus {
+        border-color: #4CAF50;
+        box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+    }
+
+    .voice-button {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #666;
+        cursor: pointer;
+        font-size: 16px;
+        transition: all 0.2s;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+    }
+
+    .voice-button:hover {
+        color: #4CAF50;
+        background: rgba(76, 175, 80, 0.1);
+    }
+
+    .voice-button.listening {
+        color: #fff;
+        background: #f44336;
+        animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+        0% { box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.4); }
+        70% { box-shadow: 0 0 0 10px rgba(244, 67, 54, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(244, 67, 54, 0); }
+    }
+
+    #send-button {
+        padding: 10px 20px;
+        background: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 24px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.3s;
+    }
+
+    #send-button:hover {
+        background: #45a049;
+    }
+    .play-audio-btn {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.play-audio-btn:hover {
+    background-color: #45a049;
+}
+
+.play-audio-btn i {
+    margin-right: 5px;
+}
+
+    </style>
+</head>
+
+<body>
+
+<div id="container" class="effect aside-float aside-bright mainnav-lg">
+    <header id="navbar">
+        <div id="navbar-container" class="boxed">
+           <div class="navbar-header">
+                <a href="{% url 'chat' %}" class="navbar-brand">
+{#                                            <img src="../static/images/DQLOGO.png.jpg" alt="Nifty Logo" class="brand-icon">#}
+                    <div class="brand-title" style="display: flex; align-items: center;">
+            <img src="{% static 'images/yy.jpg' %}" height="25px" width="25px" style="border-radius: 40%; margin-right: 5px;">
+            <span class="brand-text" style="color: honeydew">语音助手</span>
+        </div>
+                </a>
+            </div>
+
+
+            <div class="navbar-content clearfix">
+                <ul class="nav navbar-top-links pull-left">
+
+                    <li class="tgl-menu-btn">
+                        <a class="mainnav-toggle" href="#">
+                            <i class="demo-pli-view-list"></i>
+                        </a>
+                    </li>
+
+                </ul>
+                <ul class="nav navbar-top-links pull-left">
+                    <h4 style="font-size: 20px">基于大语言模型的拟人化语音交互系统</h4>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <div class="boxed">
+        <div id="content-container" style="">
+            <div id="page-content">
+    <div class="chat-container">
+        <div class="chat-header">
+            语音聊天智能助手
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <div class="message bot-message">
+                {% if request.session.persona_name %}
+                    Hi~ 我叫 {{ request.session.persona_name }}，是你的专属语音聊天助手，让我们一起聊天吧~
+                {% else %}
+                    Hi~ 我是语音聊天智能助手，很高兴见到你，我可以陪你一起聊天哦！
+                {% endif %}
+            </div>
+        </div>
+        <div class="chat-input">
+            <div class="input-wrapper">
+                <input type="text" id="user-input" placeholder="输入你的问题..." autocomplete="off">
+                <button id="voice-button" class="voice-button" title="语音输入">
+                    <i class="fas fa-microphone"></i>
+                </button>
+            </div>
+            <button id="send-button">发送</button>
+        </div>
+    </div>
+</div>
+
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const userInput = document.getElementById('user-input');
+            const voiceButton = document.getElementById('voice-button');
+            const sendButton = document.getElementById('send-button');
+            const voiceIcon = voiceButton.querySelector('i');
+
+            let recognition;
+            let isRecording = false;
+
+            // 初始化语音识别
+            function initSpeechRecognition() {
+                if ('webkitSpeechRecognition' in window) {
+                    recognition = new webkitSpeechRecognition();
+                    recognition.continuous = false;
+                    recognition.interimResults = false;
+                    recognition.lang = 'zh-CN';
+
+                    recognition.onstart = function() {
+                        console.log('语音识别已启动');
+                        isRecording = true;
+                        voiceButton.classList.add('listening');
+                        voiceButton.title = '正在聆听 - 点击停止';
+                        voiceIcon.classList.replace('fa-microphone', 'fa-stop');
+                    };
+
+                    recognition.onend = function() {
+                        console.log('语音识别已结束');
+                        if(isRecording) { // 防止自动停止时重复调用
+                            stopRecording();
+                        }
+                    };
+
+                    recognition.onerror = function(event) {
+                        console.error('语音识别错误:', event.error);
+                        stopRecording();
+
+                        // 特定错误处理
+                        const errorMap = {
+                            'not-allowed': '请允许麦克风权限',
+                            'no-speech': '没有检测到语音输入',
+                            'audio-capture': '无法捕获音频',
+                            'network': '网络连接失败，请检查网络',
+                            'language-not-supported': '不支持中文识别'
+                        };
+
+                        alert(errorMap[event.error] || `语音识别错误: ${event.error}`);
+                    };
+
+                    recognition.onresult = function(event) {
+                        const transcript = event.results[0][0].transcript;
+                        userInput.value = transcript;
+                        userInput.focus();
+                        stopRecording();
+                    };
+
+                } else {
+                    voiceButton.style.display = 'none';
+                    console.warn('当前浏览器不支持语音识别API');
+                    alert('您的浏览器不支持语音识别功能，请使用Chrome或Edge浏览器');
+                }
+            }
+
+            // 停止录音的统一处理
+            function stopRecording() {
+                if(recognition && isRecording) {
+                    recognition.stop(); // 这会在处理完成后触发onend
+                    isRecording = false;
+                    voiceButton.classList.remove('listening');
+                    voiceButton.title = '语音输入';
+                    voiceIcon.classList.replace('fa-stop', 'fa-microphone');
+                }
+            }
+
+            // 初始化语音识别
+            initSpeechRecognition();
+
+            // 语音按钮点击事件
+            voiceButton.addEventListener('click', function() {
+                if (isRecording) {
+                    stopRecording();
+                } else {
+                    try {
+                        // 清空可能的旧结果
+                        userInput.value = '';
+                        recognition.start();
+                    } catch (error) {
+                        console.error('启动语音识别失败:', error);
+                        alert('无法启动语音识别，请刷新页面后重试');
+                    }
+                }
+            });
+
+            const chatMessages = document.getElementById('chat-messages');
+
+            // 发送消息函数
+function sendMessage() {
+    const message = userInput.value.trim();
+    if (message === '') return;
+
+    addMessage(message, 'user');
+    userInput.value = '';
+
+    // 显示"正在输入"指示器
+    const typingIndicator = document.createElement('div');
+    typingIndicator.className = 'typing-indicator';
+    // 获取 Django 传递的会话数据
+    const personaName = "{{ request.session.persona_name|default:'语音小助手' }}";
+    if (personaName) {
+            typingIndicator.textContent = personaName + '正在思考...';
+        } else {
+            typingIndicator.textContent = '语音小助手正在思考...';
+        }
+    chatMessages.appendChild(typingIndicator);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    // 同时发送文本查询和语音请求
+
+        fetch('/qa/smart_query/', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({query: message})
+        })
+        {#.then(async (audioResponse) => #}
+        // 处理文本回复
+        {#const textData = await textResponse.json();#}
+        {#let responseText = textData.polished || textData.answer || '抱歉，我没有找到相关信息。';#}
+            .then(response => response.json())
+            //解析的数据
+            .then(data=>{
+                // 创建包含文本和播放按钮的消息
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message bot-message';
+
+        // 添加文本内容
+        messageDiv.innerHTML = `
+            <div>${data.text}</div>
+            <button class="play-audio-btn" data-audio-id="${Date.now()}">
+                <i class="fas fa-play"></i> 播放语音
+            </button>
+        `;
+
+        // 移除"正在输入"指示器
+        chatMessages.removeChild(typingIndicator);
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        // 添加播放功能
+        messageDiv.querySelector('.play-audio-btn').addEventListener('click', function() {
+            const audio = new Audio(data.audio_url);
+            audio.play();
+        })
+        }).catch(error => {
+        console.error('Error:', error);
+        chatMessages.removeChild(typingIndicator);
+        addMessage('抱歉，请求处理时出现了问题。', 'bot');
+    });
+}
+
+// 音频播放函数
+function playAudio(audioUrl) {
+    const audio = new Audio(audioUrl);
+    audio.play();
+
+    // 音频播放结束后释放内存
+    audio.addEventListener('ended', () => {
+        URL.revokeObjectURL(audioUrl);
+    });
+}
+
+            // 添加消息到聊天界面
+            function addMessage(text, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}-message`;
+                // messageDiv.innerHTML= text;
+                messageDiv.innerHTML = text;
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            // 事件监听
+            sendButton.addEventListener('click', sendMessage);
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+
+        });
+    </script>
+         <link href="{% static 'js/qascript.js' %}">
+            <nav id="mainnav-container">
+                <div id="mainnav">
+                    <div id="mainnav-menu-wrap">
+                        <div class="nano">
+                            <div class="nano-content">
+                                <ul id="mainnav-menu" class="list-group">
+                                    <li class="list-header" style="font-size: 18px"> 个性化服务</li>
+                                    <li>
+                                        <a href="{% url 'person_setting' %}" id="persona-style-btn">
+                                            <i class="fa fa-user" style="width:24px"></i>
+                                            <strong class="menu-title" style="font-size: 14px">人设风格</strong>
+                                        </a>
+                                    </li>
+
+                                    <li class="list-divider"></li>
+                                    
+                                    <li class="list-header" style="font-size: 18px">用户设置</li>
+                                    <li>
+                                        <a href="{% url 'profile' %}">
+                                            <i class="fa fa-gear" style="width:24px"></i>
+                                            <strong class="menu-title" style="font-size: 14px">个人信息</strong>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </nav>
+
+
+        </div>
+        <footer id="footer">
+        </footer>
+        <button class="scroll-top btn">
+            <i class="pci-chevron chevron-up"></i>
+        </button>
+    </div>
+</div>
+</body>
+</html>

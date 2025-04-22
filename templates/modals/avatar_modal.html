@@ -1,0 +1,47 @@
+<!-- templates/modals/avatar_modal.html -->
+<div class="modal fade" id="avatarModal" tabindex="-1" role="dialog" aria-labelledby="avatarModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="avatarModalLabel">修改头像</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="post" action="{% url 'update_avatar' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="modal-body text-center">
+          <div class="avatar-preview mb-3">
+            <img id="avatarPreview" src="{{ user.get_avatar_url }}" class="rounded-circle" width="150" height="150" alt="当前头像">
+          </div>
+          <div class="form-group">
+            <div class="custom-file">
+              <input type="file" class="custom-file-input" id="avatarInput" name="avatar" accept="image/*" required>
+              <label class="custom-file-label" for="avatarInput">选择图片文件</label>
+            </div>
+            <small class="form-text text-muted">支持JPG、PNG格式，建议尺寸200×200像素</small>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+          <button type="submit" class="btn btn-primary">保存更改</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+// 实时预览选择的图片
+document.getElementById('avatarInput').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById('avatarPreview').src = e.target.result;
+    }
+    reader.readAsDataURL(file);
+    document.querySelector('.custom-file-label').textContent = file.name;
+  }
+});
+</script>

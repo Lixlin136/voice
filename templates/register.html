@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <title>注册页面</title>
+    <style>
+        body {
+            {#background: linear-gradient(135deg, rgb(122, 230, 246,0.3), rgba(135, 206, 250, 0.3));#}
+             background-image: url({% static 'images/bg21.png' %});
+            background-size: cover; /* 让背景图片覆盖整个元素 */
+    background-repeat: no-repeat; /* 禁止背景图片重复 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .register-container {
+            background: #72ADDD;
+            padding: 32px;
+            border-radius: 24px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 420px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #A9E4B4;
+            border-radius: 10px;
+            outline: none;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .input-group input:focus {
+            border-color: #68CBDA;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+        }
+
+        .input-group label {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            color: #999;
+            pointer-events: none;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus~label,
+        .input-group input:valid~label {
+            top: -10px;
+            left: 10px;
+            background: #C6DED2;
+            padding: 0 5px;
+            font-size: 12px;
+            color: rgb(133, 146, 139);
+        }
+
+        .register-btn {
+            width: 100%;
+            padding: 14px;
+            background-color: #91EFF1;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+        }
+
+        .register-btn:hover {
+            background-color: #65999A;
+            box-shadow: 0 6px 12px rgba(0, 123, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        h2 {
+            margin-bottom: 24px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .link-text {
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        .link-text a {
+            color: #007BFF;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .link-text a:hover {
+            color: #0056b3;
+        }
+        /* 消息容器样式 */
+        .messages {
+            list-style-type: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+
+        /* 消息项样式 */
+        .messages li {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        /* 成功消息样式 */
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* 错误消息样式 */
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+
+<body>
+<!-- 渲染消息 -->
+    <!-- 渲染消息 -->
+{#    {% if messages %}#}
+{#        <ul class="messages">#}
+{#            {% for message in messages %}#}
+{#                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>#}
+{#            {% endfor %}#}
+{#        </ul>#}
+{#    {% endif %}#}
+    <form action="{% url 'register' %}" style="width: 400px" method="post">
+        {% csrf_token %}
+        <div class="register-container">
+        <h2 class="text-2xl font-bold text-center" style="margin-bottom: 13px">注册</h2>
+        <div class="input-group">
+            <input type="text" placeholder=" " id="username" name="username" required>
+            <label for="username">用户名</label>
+        </div>
+        <div class="input-group">
+            <input type="email" placeholder=" " id="email" name="email" required>
+            <label for="email">邮箱</label>
+        </div>
+        <div class="input-group">
+            <input type="password" placeholder=" " id="password1" name="password1" required>
+            <label for="password">密码</label>
+        </div>
+        <div class="input-group">
+            <input type="password" placeholder=" " id="password2" name="password2" required>
+            <label for="confirmPassword">确认密码</label>
+        </div>
+        <button type="submit" class="register-btn">注册</button>
+        <p class="link-text">已有账号？<a href="{% url 'login' %}">登录</a></p>
+    </div>
+    </form>
+
+</body>
+
+</html>

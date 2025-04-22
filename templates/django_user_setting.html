@@ -1,0 +1,214 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{#    <link rel="stylesheet" href="{% static 'css/bootstrap-icons.css' %}">#}
+
+    <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+
+    <link rel="shortcut icon" href="{% static "images/logo.jpg" %}">
+    <link href="{% static "css/nifty.min.css" %}" rel="stylesheet">
+
+
+    <link href="{% static "css/nifty-demo-icons.min.css" %}" rel="stylesheet">
+
+
+    <link href="{% static  "css/nifty-demo-icons.min.css" %}" rel="stylesheet">
+    <link href="{% static  "css/nifty-demo.min.css" %}" rel="stylesheet">
+    <link href="{% static  "css/font-awesome.min.css" %}" rel="stylesheet">
+    <link href="{% static  "css/wiki.css" %}" rel="stylesheet">
+    <link href="{% static  "css/pace.min.css" %}" rel="stylesheet">
+    <script src="{% static  "js/pace.min.js" %}"></script>
+    <script src="{% static  "js/jquery-2.2.4.min.js" %}"></script>
+    <!--BootstrapJS [ RECOMMENDED ]-->
+    <script src="{% static  "js/bootstrap.min.js" %}"></script>
+    <!--NiftyJS [ RECOMMENDED ]-->
+    <script src="{% static  "js/nifty.min.js" %}"></script>
+    <script src="{% static  "js/icons.js" %}"></script>
+    <script src="{% static  "js/echarts.min.js" %}"></script>
+
+    <script src={% static "js/nifty-demo.min.js" %}></script>
+    <link href="{% static 'css/qastyle.css' %}">
+    <style>
+        .container {
+  width: 80%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  color: #333;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.info-item {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.info-item label {
+  width: 120px;
+  color: #666;
+  font-weight: bold;
+}
+
+.info-item img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.info-item span {
+  flex: 1;
+  color: #333;
+}
+
+.modify-link {
+  color: #007bff;
+  text-decoration: none;
+  margin-left: 10px;
+}
+
+.modify-link:hover {
+  text-decoration: underline;
+}
+    </style>
+</head>
+
+<body>
+
+<div id="container" class="effect aside-float aside-bright mainnav-lg">
+    <header id="navbar">
+        <div id="navbar-container" class="boxed">
+            <div class="navbar-header">
+                <a href="" class="navbar-brand">
+                    {#                        <img src="../static/images/logo.jpg" alt="Nifty Logo" class="brand-icon">#}
+                    <div class="brand-title">
+                        <span class="brand-text">仪表盘</span>
+                    </div>
+                </a>
+            </div>
+
+
+            <div class="navbar-content clearfix">
+                <ul class="nav navbar-top-links pull-left">
+
+                    <li class="tgl-menu-btn">
+                        <a class="mainnav-toggle" href="#">
+                            <i class="demo-pli-view-list"></i>
+                        </a>
+                    </li>
+
+                </ul>
+                <ul class="nav navbar-top-links pull-left" style="display: flex">
+                    <h4 style="font-size: 20px">基于大语言模型的拟人化语音交互系统</h4>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
+  
+</div>
+    <!-- 加载Bootstrap JS Bundle（包含Popper.js） -->
+
+    <div class="boxed">
+        <div id="content-container" style="">
+            <div class="container" style="height: 600px">
+    <h2>基本信息</h2>
+    <div class="info-item">
+      <label for="avatar">头像:</label>
+      <img src="{{ avatar_url }}" alt="用户头像" id="avatar">
+      <a href="#" class="modify-link" data-toggle="modal" data-target="#avatarModal" style="margin-left: 310px">修改头像</a>
+    </div>
+    <div class="info-item">
+      <label for="nickname">个人昵称:</label>
+      <span id="nickname">{{ nickname }}</span>
+      <a href="#" class="modify-link" data-toggle="modal" data-target="#nicknameModal">修改昵称</a>
+    </div>
+    <div class="info-item">
+      <label for="phone">手机号绑定:</label>
+      <span id="phone">{{ phone }}</span>
+      <a href="#" class="modify-link" data-toggle="modal" data-target="#phoneModal">立即绑定</a>
+    </div>
+    <div class="info-item">
+      <label for="email">邮箱绑定:</label>
+      <span id="email">{{ email }}</span>
+      <a href="#" class="modify-link" data-toggle="modal" data-target="#emailModal">修改邮箱</a>
+{#      <a href="#" class="modify-link" onclick="confirmUnbindEmail()">解绑</a>#}
+    </div>
+    <div class="info-item">
+      <label for="signature">个性签名:</label>
+      <span id="signature">{{ signature }}</span>
+      <a href="#" class="modify-link" data-toggle="modal" data-target="#signatureModal">修改个性签名</a>
+    </div>
+</div>
+
+<!-- 模态框模板 -->
+{% include 'modals/avatar_modal.html' %}
+{% include 'modals/nickname_modal.html' %}
+{% include 'modals/phone_modal.html' %}
+{% include 'modals/email_modal.html' %}
+{% include 'modals/signature_modal.html' %}
+
+<script>
+{#function confirmUnbindEmail() {#}
+{#    if (confirm('确定要解绑邮箱吗？')) {#}
+{#        window.location.href = "{% url 'unbind_email' %}";#}
+{#    }#}
+{# }#}
+</script>
+            <nav id="mainnav-container">
+                <div id="mainnav">
+                    <div id="mainnav-menu-wrap">
+                        <div class="nano">
+                           <div class="nano-content">
+                            <ul id="mainnav-menu" class="list-group">
+                                <li class="list-header" style="font-size: 18px"> 个性化服务</li>
+                                <li>
+                                    <a href="{% url 'person_setting' %}" id="persona-style-btn">
+                                        <i class="fa fa-user" style="width:24px"></i>
+                                        <strong class="menu-title" style="font-size: 14px">人设风格</strong>
+                                    </a>
+                                </li>
+
+                                <li class="list-divider"></li>
+
+                                <li class="list-header" style="font-size: 18px">用户设置</li>
+                                <li>
+                                    <a href="{% url 'profile' %}">
+                                        <i class="fa fa-gear" style="width:24px"></i>
+                                        <strong class="menu-title" style="font-size: 14px">个人信息</strong>
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                        </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </nav>
+
+
+        </div>
+        <footer id="footer">
+        </footer>
+        <button class="scroll-top btn">
+            <i class="pci-chevron chevron-up"></i>
+        </button>
+    </div>
+</div>
+</body>
+</html>
