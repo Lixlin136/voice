@@ -79,9 +79,9 @@ WSGI_APPLICATION = "Voiceai.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'voice_db',
+        'NAME': 'your database name',
         'USER': 'root',
-        'PASSWORD': 'lxl2000727',
+        'PASSWORD': 'your password',
         'HOST': 'localhost',
         'PORT': '3306',
     }

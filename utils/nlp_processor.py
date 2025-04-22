@@ -5,7 +5,8 @@ from openai import OpenAI
 from dashscope.audio.tts import SpeechSynthesizer
 
 qian_wen_api = "your api key"
-qian_wen_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"
+# 可选 https://dashscope.aliyuncs.com/compatible-mode/v1
+qian_wen_url = "your url"
 
 client = OpenAI(api_key=qian_wen_api,
                 base_url=qian_wen_url)
